@@ -2,10 +2,10 @@
 
 Quality-of-life module for Foundry VTT v13 with three independent features, each toggleable in module settings.
 
-## Background tile layer
+## Background layer (tiles & drawings)
 
-- Select a tile and press the layer-group button in its HUD (right-click the tile) to **send it to the background**: it renders beneath all other tiles and becomes completely click-through — you can't select or move it by accident while working with normal tiles.
-- To edit background tiles, enable the **Edit Background Tiles** toggle in the tile scene controls. While it is on, only background tiles are selectable and normal tiles are dimmed. Use the same HUD button to restore a tile from the background.
+- Select a tile or drawing and press the layer-group button in its HUD (right-click the object) to **send it to the background**: it renders beneath its siblings and becomes completely click-through — you can't select or move it by accident while working with normal objects.
+- To edit background objects, enable the **Edit Background Tiles** toggle in the tile or drawing scene controls. While it is on, only background objects are selectable and the rest are dimmed. Use the same HUD button to restore an object from the background.
 
 ## Group rotation
 

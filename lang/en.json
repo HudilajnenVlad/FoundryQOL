@@ -2,8 +2,8 @@
   "QOLCT": {
     "Settings": {
       "BackgroundTiles": {
-        "Name": "Background tile layer",
-        "Hint": "Allows marking tiles as background: they render beneath everything and are locked against selection unless background edit mode is active."
+        "Name": "Background layer (tiles & drawings)",
+        "Hint": "Allows marking tiles and drawings as background: they render beneath their siblings and are locked against selection unless background edit mode is active."
       },
       "GroupRotation": {
         "Name": "Group rotation",

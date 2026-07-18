@@ -2,8 +2,8 @@
   "QOLCT": {
     "Settings": {
       "BackgroundTiles": {
-        "Name": "Warstwa kafelków tła",
-        "Hint": "Pozwala oznaczać kafelki jako tło: są renderowane pod wszystkim innym i zablokowane przed zaznaczaniem, dopóki tryb edycji tła nie jest aktywny."
+        "Name": "Warstwa tła (kafelki i rysunki)",
+        "Hint": "Pozwala oznaczać kafelki i rysunki jako tło: są renderowane pod pozostałymi obiektami i zablokowane przed zaznaczaniem, dopóki tryb edycji tła nie jest aktywny."
       },
       "GroupRotation": {
         "Name": "Obrót grupowy",
