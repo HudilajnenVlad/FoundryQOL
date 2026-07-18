@@ -10,8 +10,12 @@
         "Hint": "When several tiles or drawings are selected, rotation turns the whole group around its common center instead of each object around its own axis."
       },
       "RotationHandle": {
-        "Name": "Rotation handle",
-        "Hint": "Shows a draggable rotation handle above selected tiles and drawings, like in Roll20. Hold Shift while dragging to snap to 15° steps."
+        "Name": "Rotation & scale handles",
+        "Hint": "Shows a draggable rotation handle (follows the object's rotation) and a corner scale handle on selected tiles and drawings, like in Roll20. Hold Shift while rotating to snap to 15° steps."
+      },
+      "DrawingStyleBar": {
+        "Name": "Drawing style bar",
+        "Hint": "Shows a floating toolbar when drawings are selected: change stroke color, thickness, fill and opacity of the whole selection at once."
       },
       "TokenTooltip": {
         "Name": "Token tooltips",
@@ -24,6 +28,13 @@
     },
     "Controls": {
       "BackgroundMode": "Edit Background Tiles"
+    },
+    "StyleBar": {
+      "Count": "{count} selected",
+      "StrokeColor": "Stroke color",
+      "StrokeWidth": "Stroke width",
+      "Fill": "Fill",
+      "Opacity": "Opacity"
     },
     "TooltipConfig": {
       "Legend": "Tooltip",

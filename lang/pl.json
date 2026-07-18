@@ -10,8 +10,12 @@
         "Hint": "Gdy zaznaczonych jest kilka kafelków lub rysunków, obrót obraca całą grupę wokół wspólnego środka, a nie każdy obiekt wokół własnej osi."
       },
       "RotationHandle": {
-        "Name": "Uchwyt obrotu",
-        "Hint": "Pokazuje przeciągalny uchwyt obrotu nad zaznaczonymi kafelkami i rysunkami, jak w Roll20. Przytrzymaj Shift podczas przeciągania, aby przyciągać co 15°."
+        "Name": "Uchwyty obrotu i skalowania",
+        "Hint": "Pokazuje uchwyt obrotu (podąża za obrotem obiektu) i narożny uchwyt skalowania przy zaznaczonych kafelkach i rysunkach, jak w Roll20. Przytrzymaj Shift podczas obracania, aby przyciągać co 15°."
+      },
+      "DrawingStyleBar": {
+        "Name": "Pasek stylu rysunków",
+        "Hint": "Pokazuje pływający pasek narzędzi przy zaznaczonych rysunkach: zmiana koloru linii, grubości, wypełnienia i przezroczystości całego zaznaczenia naraz."
       },
       "TokenTooltip": {
         "Name": "Podpowiedzi tokenów",
@@ -24,6 +28,13 @@
     },
     "Controls": {
       "BackgroundMode": "Edytuj kafelki tła"
+    },
+    "StyleBar": {
+      "Count": "Zaznaczono: {count}",
+      "StrokeColor": "Kolor linii",
+      "StrokeWidth": "Grubość linii",
+      "Fill": "Wypełnienie",
+      "Opacity": "Przezroczystość"
     },
     "TooltipConfig": {
       "Legend": "Podpowiedź",

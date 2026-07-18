@@ -4,6 +4,7 @@ export const SETTINGS = {
   backgroundTiles: "backgroundTiles",
   groupRotation: "groupRotation",
   rotationHandle: "rotationHandle",
+  drawingStyleBar: "drawingStyleBar",
   tokenTooltip: "tokenTooltip"
 };
 
@@ -29,6 +30,15 @@ export function registerSettings() {
   game.settings.register(MODULE_ID, SETTINGS.rotationHandle, {
     name: "QOLCT.Settings.RotationHandle.Name",
     hint: "QOLCT.Settings.RotationHandle.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(MODULE_ID, SETTINGS.drawingStyleBar, {
+    name: "QOLCT.Settings.DrawingStyleBar.Name",
+    hint: "QOLCT.Settings.DrawingStyleBar.Hint",
     scope: "world",
     config: true,
     type: Boolean,

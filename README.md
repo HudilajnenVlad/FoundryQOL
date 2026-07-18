@@ -11,11 +11,18 @@ Quality-of-life module for Foundry VTT v13 with three independent features, each
 
 When two or more **tiles** or **drawings** are selected, rotating them (mouse wheel with Shift/Ctrl, or keyboard) turns the whole group around its common center instead of spinning each object around its own axis. A single selected object rotates in place as usual. Tokens are unaffected.
 
-## Rotation handle
+## Rotation & scale handles
 
-Selected tiles and drawings show a small round **handle above the selection** (like in Roll20). Drag it to rotate — free rotation in 1° steps, or hold **Shift** to snap to 15°. With several objects selected the whole group turns around its common center (when group rotation is enabled).
+Selected tiles and drawings get Roll20-style handles:
 
-Core Foundry shortcuts still work too: hover a selected object and scroll with **Ctrl** (15°) or **Shift** (45°).
+- A **round rotation knob** above the object that follows the object's rotation. Drag it to rotate with a live preview — free rotation in 1° steps, or hold **Shift** to snap to 15°. With several objects selected the whole group turns around its common center (when group rotation is enabled).
+- A **square scale knob** at the bottom-right corner. Drag it to stretch or compress the whole selection uniformly (polygons and freehand drawings scale correctly too).
+
+Core Foundry shortcuts still work: hover a selected object and scroll with **Ctrl** (15°) or **Shift** (45°).
+
+## Drawing style bar
+
+Selecting one or more drawings shows a floating toolbar at the top of the screen: **stroke color, stroke width, fill on/off + color, opacity** — every change applies to the whole selection at once.
 
 ## Token tooltips (Roll20 style)
 

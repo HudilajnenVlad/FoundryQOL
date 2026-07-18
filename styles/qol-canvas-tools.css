@@ -27,3 +27,57 @@
 #hud .control-icon.qolct-background.active {
   color: var(--color-warm-2, #ffbb44);
 }
+
+#qolct-style-bar {
+  position: fixed;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px;
+  background: rgba(20, 20, 25, 0.9);
+  border: 1px solid #555;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  color: #f0f0f0;
+  font-size: 13px;
+}
+
+#qolct-style-bar label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+#qolct-style-bar input[type="color"] {
+  width: 28px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid #777;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+#qolct-style-bar input[type="number"] {
+  width: 48px;
+  height: 22px;
+  color: #f0f0f0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid #777;
+  border-radius: 4px;
+  text-align: center;
+}
+
+#qolct-style-bar input[type="range"] {
+  width: 70px;
+}
+
+#qolct-style-bar .qolct-count:not(:empty) {
+  font-weight: bold;
+  color: #ffbb44;
+}

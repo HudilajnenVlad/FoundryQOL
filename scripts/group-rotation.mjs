@@ -4,7 +4,7 @@ import { SETTINGS, isEnabled } from "./settings.mjs";
 const GROUP_LAYERS = ["Tile", "Drawing"];
 
 /** Pixel size of a placeable document, accounting for Drawings storing size in shape. */
-function docSize(doc) {
+export function docSize(doc) {
   if (doc.shape) return { w: doc.shape.width, h: doc.shape.height };
   return { w: doc.width, h: doc.height };
 }
