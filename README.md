@@ -26,7 +26,7 @@ Token Settings (and Prototype Token settings) gain a **Tooltip** section on the 
 In Foundry: **Add-on Modules → Install Module**, paste this manifest URL and click Install:
 
 ```
-https://github.com/HudilajnenVlad/qol-canvas-tools/releases/latest/download/module.json
+https://github.com/HudilajnenVlad/FoundryQOL/releases/latest/download/module.json
 ```
 
 (Requires at least one published release — push a tag like `v1.0.0` and the GitHub Action builds it automatically.)
