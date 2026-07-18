@@ -4,7 +4,11 @@ export const SETTINGS = {
   backgroundTiles: "backgroundTiles",
   groupRotation: "groupRotation",
   rotationHandle: "rotationHandle",
+  showRotateKnob: "showRotateKnob",
+  showScaleKnob: "showScaleKnob",
   drawingStyleBar: "drawingStyleBar",
+  brushPanel: "brushPanel",
+  brushPalette: "brushPalette",
   tokenTooltip: "tokenTooltip"
 };
 
@@ -34,6 +38,40 @@ export function registerSettings() {
     config: true,
     type: Boolean,
     default: true
+  });
+
+  game.settings.register(MODULE_ID, SETTINGS.showRotateKnob, {
+    name: "QOLCT.Settings.ShowRotateKnob.Name",
+    hint: "QOLCT.Settings.ShowRotateKnob.Hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(MODULE_ID, SETTINGS.showScaleKnob, {
+    name: "QOLCT.Settings.ShowScaleKnob.Name",
+    hint: "QOLCT.Settings.ShowScaleKnob.Hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(MODULE_ID, SETTINGS.brushPanel, {
+    name: "QOLCT.Settings.BrushPanel.Name",
+    hint: "QOLCT.Settings.BrushPanel.Hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(MODULE_ID, SETTINGS.brushPalette, {
+    scope: "client",
+    config: false,
+    type: Array,
+    default: ["#ffffff", "#000000", "#e74c3c", "#e67e22", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6"]
   });
 
   game.settings.register(MODULE_ID, SETTINGS.drawingStyleBar, {

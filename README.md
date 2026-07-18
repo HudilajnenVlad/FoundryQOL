@@ -18,7 +18,15 @@ Selected tiles, drawings and tokens get Roll20-style handles:
 - A **round rotation knob** above the object that follows the object's rotation. Drag it to rotate with a live preview — free rotation in 1° steps, or hold **Shift** to snap to 15°. With several objects selected the whole group turns around its common center (when group rotation is enabled).
 - A **square scale knob** at the bottom-right corner. Drag it to stretch or compress the whole selection uniformly, down to a small fraction of the original size (polygons and freehand drawings scale correctly; tokens resize in grid units).
 
+When the scene has a grid, handle rotation **magnetizes to grid directions**: 45° steps on square grids, 30° steps on hexes (sides + corners); hold **Shift** for free rotation. On gridless scenes rotation is free, Shift snaps to 15°. On hex grids token resizing snaps to valid token sizes (0.5 or whole spaces).
+
+Each knob can be hidden individually per user in the module settings.
+
 Core Foundry shortcuts still work: hover a selected object and scroll with **Ctrl** (15°) or **Shift** (45°).
+
+## Brush panel
+
+A paintbrush button in the drawing tools opens a small **brush panel**: color picker + hex code field, thickness slider, and a **customizable quick-access palette** (click a swatch to use it, "+" to save the current color, right-click a swatch to remove it). It sets the defaults for new drawings — and if drawings are selected, restyles them too.
 
 ## Drawing style bar
 

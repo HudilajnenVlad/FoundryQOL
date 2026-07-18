@@ -13,6 +13,18 @@
         "Name": "Rotation & scale handles",
         "Hint": "Shows a draggable rotation handle (follows the object's rotation) and a corner scale handle on selected tiles, drawings and tokens, like in Roll20. Hold Shift while rotating to snap to 15° steps."
       },
+      "ShowRotateKnob": {
+        "Name": "Show rotation handle",
+        "Hint": "Show the round rotation knob on selected objects (per user)."
+      },
+      "ShowScaleKnob": {
+        "Name": "Show scale handle",
+        "Hint": "Show the square stretch/compress knob on selected objects (per user)."
+      },
+      "BrushPanel": {
+        "Name": "Brush panel",
+        "Hint": "Adds a brush button to the drawing tools: quick color, thickness and a customizable palette for new drawings."
+      },
       "DrawingStyleBar": {
         "Name": "Drawing style bar",
         "Hint": "Shows a floating toolbar when drawings are selected: change stroke color, thickness, fill and opacity of the whole selection at once."
@@ -27,7 +39,16 @@
       "RestoreFromBackground": "Restore from background"
     },
     "Controls": {
-      "BackgroundMode": "Edit Background Tiles"
+      "BackgroundMode": "Edit Background Tiles",
+      "BrushPanel": "Brush Settings"
+    },
+    "Brush": {
+      "Title": "Brush",
+      "Color": "Brush color",
+      "Hex": "Hex code",
+      "Width": "Stroke thickness",
+      "Add": "Add current color to palette",
+      "PaletteHint": "Click to use a color; right-click to remove it"
     },
     "StyleBar": {
       "Count": "{count} selected",

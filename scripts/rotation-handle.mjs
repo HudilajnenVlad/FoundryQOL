@@ -132,8 +132,18 @@ function rotatedState(orig, pivot, delta) {
 function scaledState(orig, pivot, factor) {
   const cx = pivot.x + (orig.x + orig.w / 2 - pivot.x) * factor;
   const cy = pivot.y + (orig.y + orig.h / 2 - pivot.y) * factor;
-  const w = orig.w * factor;
-  const h = orig.h * factor;
+  let w = orig.w * factor;
+  let h = orig.h * factor;
+  // Hexagonal grids only support token sizes of 0.5 or whole grid spaces;
+  // anything else crashes core movement measurement.
+  if (isToken(orig.obj) && canvas.grid.isHexagonal) {
+    const gsX = canvas.grid.sizeX ?? canvas.grid.size;
+    const gsY = canvas.grid.sizeY ?? canvas.grid.size;
+    let units = Math.max(w / gsX, h / gsY);
+    units = units <= 0.75 ? 0.5 : Math.max(1, Math.round(units));
+    w = units * gsX;
+    h = units * gsY;
+  }
   const state = { x: cx - w / 2, y: cy - h / 2, w, h };
   if (orig.points) state.points = orig.points.map((p) => p * factor);
   // Drawings scale like an image (Roll20 behavior): stroke, text and radius
@@ -228,6 +238,9 @@ export function updateHandle() {
     hud.scaleKnob.on("pointerdown", (ev) => onDragStart(ev, "scale"));
     layer.addChild(hud);
   }
+  hud.rotKnob.visible = isEnabled(SETTINGS.showRotateKnob);
+  hud.scaleKnob.visible = isEnabled(SETTINGS.showScaleKnob);
+  if (!hud.rotKnob.visible && !hud.scaleKnob.visible) return destroyHud();
   positionHud(objects);
 }
 
@@ -303,6 +316,19 @@ function normalizeDelta(degrees) {
 }
 
 /**
+ * Rotation snap increment for the current grid ("magnet" to grid sides and
+ * corners): 45° on squares, 30° on hexes, free when gridless. Shift inverts:
+ * free rotation on a grid, 15° steps on gridless.
+ * @returns {number} snap increment in degrees, 0 = free (1° steps)
+ */
+function rotationSnap(shiftKey) {
+  const t = canvas.grid.type;
+  if (t === CONST.GRID_TYPES.GRIDLESS) return shiftKey ? 15 : 0;
+  if (shiftKey) return 0;
+  return t === CONST.GRID_TYPES.SQUARE ? 45 : 30;
+}
+
+/**
  * The smallest scale factor that keeps every object valid. Drawings must obey
  * Foundry's "visible drawing" rule (rect/ellipse dimensions strictly greater
  * than the stroke width, circles radius > strokeWidth/2); since the stroke
@@ -368,7 +394,15 @@ function onDragMove(event) {
   if (drag.mode === "rotate") {
     let delta = Math.toDegrees(Math.atan2(p.y - drag.pivot.y, p.x - drag.pivot.x) - drag.startAngle);
     delta = normalizeDelta(delta);
-    delta = event.shiftKey ? delta.toNearest(15) : Math.round(delta);
+    const snap = rotationSnap(event.shiftKey);
+    if (!snap) delta = Math.round(delta);
+    else if (drag.objects.length === 1) {
+      // Snap the object's resulting angle to the grid direction, not the delta
+      const target = (drag.originals[0].rotation + delta).toNearest(snap);
+      delta = normalizeDelta(target - drag.originals[0].rotation);
+    } else {
+      delta = delta.toNearest(snap);
+    }
     drag.delta = delta;
     for (const orig of drag.originals) applyPreview(orig, rotatedState(orig, drag.pivot, delta));
     // The knob rides exactly on the cursor, stem pointing back at the pivot

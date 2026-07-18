@@ -13,6 +13,18 @@
         "Name": "Uchwyty obrotu i skalowania",
         "Hint": "Pokazuje uchwyt obrotu (podąża za obrotem obiektu) i narożny uchwyt skalowania przy zaznaczonych kafelkach, rysunkach i tokenach, jak w Roll20. Przytrzymaj Shift podczas obracania, aby przyciągać co 15°."
       },
+      "ShowRotateKnob": {
+        "Name": "Pokaż uchwyt obrotu",
+        "Hint": "Pokazuje okrągły uchwyt obrotu przy zaznaczonych obiektach (dla każdego użytkownika osobno)."
+      },
+      "ShowScaleKnob": {
+        "Name": "Pokaż uchwyt skalowania",
+        "Hint": "Pokazuje kwadratowy uchwyt rozciągania/ściskania przy zaznaczonych obiektach (dla każdego użytkownika osobno)."
+      },
+      "BrushPanel": {
+        "Name": "Panel pędzla",
+        "Hint": "Dodaje przycisk pędzla do narzędzi rysowania: szybki wybór koloru, grubości i konfigurowalna paleta dla nowych rysunków."
+      },
       "DrawingStyleBar": {
         "Name": "Pasek stylu rysunków",
         "Hint": "Pokazuje pływający pasek narzędzi przy zaznaczonych rysunkach: zmiana koloru linii, grubości, wypełnienia i przezroczystości całego zaznaczenia naraz."
@@ -27,7 +39,16 @@
       "RestoreFromBackground": "Przywróć z tła"
     },
     "Controls": {
-      "BackgroundMode": "Edytuj kafelki tła"
+      "BackgroundMode": "Edytuj kafelki tła",
+      "BrushPanel": "Ustawienia pędzla"
+    },
+    "Brush": {
+      "Title": "Pędzel",
+      "Color": "Kolor pędzla",
+      "Hex": "Kod hex",
+      "Width": "Grubość linii",
+      "Add": "Dodaj bieżący kolor do palety",
+      "PaletteHint": "Kliknij, aby użyć koloru; prawy przycisk usuwa"
     },
     "StyleBar": {
       "Count": "Zaznaczono: {count}",
