@@ -1,0 +1,50 @@
+{
+  "id": "qol-canvas-tools",
+  "title": "QOL Canvas Tools",
+  "description": "Quality-of-life canvas tools: a locked background underlayer for tiles, group rotation of tiles/drawings around a common center, and Roll20-style hover tooltips for tokens.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "HudilajnenVlad"
+    }
+  ],
+  "url": "https://github.com/HudilajnenVlad/qol-canvas-tools",
+  "manifest": "https://github.com/HudilajnenVlad/qol-canvas-tools/releases/latest/download/module.json",
+  "download": "https://github.com/HudilajnenVlad/qol-canvas-tools/releases/latest/download/module.zip",
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/qol-canvas-tools.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "path": "lang/ru.json"
+    },
+    {
+      "lang": "pl",
+      "name": "Polski",
+      "path": "lang/pl.json"
+    }
+  ],
+  "relationships": {
+    "recommends": [
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "reason": "Improves compatibility of method patches with other modules."
+      }
+    ]
+  }
+}

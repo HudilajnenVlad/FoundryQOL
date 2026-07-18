@@ -1,0 +1,34 @@
+{
+  "QOLCT": {
+    "Settings": {
+      "BackgroundTiles": {
+        "Name": "Background tile layer",
+        "Hint": "Allows marking tiles as background: they render beneath everything and are locked against selection unless background edit mode is active."
+      },
+      "GroupRotation": {
+        "Name": "Group rotation",
+        "Hint": "When several tiles or drawings are selected, rotation turns the whole group around its common center instead of each object around its own axis."
+      },
+      "RotationHandle": {
+        "Name": "Rotation handle",
+        "Hint": "Shows a draggable rotation handle above selected tiles and drawings, like in Roll20. Hold Shift while dragging to snap to 15° steps."
+      },
+      "TokenTooltip": {
+        "Name": "Token tooltips",
+        "Hint": "Adds a tooltip text field to Token Settings; the note is shown near the token on hover, like in Roll20."
+      }
+    },
+    "HUD": {
+      "SendToBackground": "Send to background",
+      "RestoreFromBackground": "Restore from background"
+    },
+    "Controls": {
+      "BackgroundMode": "Edit Background Tiles"
+    },
+    "TooltipConfig": {
+      "Legend": "Tooltip",
+      "Text": "Tooltip Text",
+      "GmOnly": "GM Only"
+    }
+  }
+}

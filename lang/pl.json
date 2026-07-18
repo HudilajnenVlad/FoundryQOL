@@ -1,0 +1,34 @@
+{
+  "QOLCT": {
+    "Settings": {
+      "BackgroundTiles": {
+        "Name": "Warstwa kafelków tła",
+        "Hint": "Pozwala oznaczać kafelki jako tło: są renderowane pod wszystkim innym i zablokowane przed zaznaczaniem, dopóki tryb edycji tła nie jest aktywny."
+      },
+      "GroupRotation": {
+        "Name": "Obrót grupowy",
+        "Hint": "Gdy zaznaczonych jest kilka kafelków lub rysunków, obrót obraca całą grupę wokół wspólnego środka, a nie każdy obiekt wokół własnej osi."
+      },
+      "RotationHandle": {
+        "Name": "Uchwyt obrotu",
+        "Hint": "Pokazuje przeciągalny uchwyt obrotu nad zaznaczonymi kafelkami i rysunkami, jak w Roll20. Przytrzymaj Shift podczas przeciągania, aby przyciągać co 15°."
+      },
+      "TokenTooltip": {
+        "Name": "Podpowiedzi tokenów",
+        "Hint": "Dodaje pole tekstu podpowiedzi w ustawieniach tokena; notatka jest wyświetlana obok tokena po najechaniu kursorem, jak w Roll20."
+      }
+    },
+    "HUD": {
+      "SendToBackground": "Przenieś do tła",
+      "RestoreFromBackground": "Przywróć z tła"
+    },
+    "Controls": {
+      "BackgroundMode": "Edytuj kafelki tła"
+    },
+    "TooltipConfig": {
+      "Legend": "Podpowiedź",
+      "Text": "Tekst podpowiedzi",
+      "GmOnly": "Tylko dla MG"
+    }
+  }
+}
