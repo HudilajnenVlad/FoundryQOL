@@ -11,7 +11,7 @@
       },
       "RotationHandle": {
         "Name": "Rotation & scale handles",
-        "Hint": "Shows a draggable rotation handle (follows the object's rotation) and a corner scale handle on selected tiles and drawings, like in Roll20. Hold Shift while rotating to snap to 15° steps."
+        "Hint": "Shows a draggable rotation handle (follows the object's rotation) and a corner scale handle on selected tiles, drawings and tokens, like in Roll20. Hold Shift while rotating to snap to 15° steps."
       },
       "DrawingStyleBar": {
         "Name": "Drawing style bar",

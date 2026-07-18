@@ -17,10 +17,23 @@ const enabled = () => isEnabled(SETTINGS.rotationHandle);
 function activeTargetLayer() {
   const layer = canvas.activeLayer;
   const dn = layer?.constructor?.documentName;
-  return dn === "Tile" || dn === "Drawing" ? layer : null;
+  return dn === "Tile" || dn === "Drawing" || dn === "Token" ? layer : null;
 }
 
 const isDrawing = (obj) => obj.document.documentName === "Drawing";
+const isToken = (obj) => obj.document.documentName === "Token";
+
+/** Pixel dimensions of a placeable (tokens store their size in grid units). */
+function pixelSize(obj) {
+  const doc = obj.document;
+  if (isToken(obj)) {
+    return {
+      w: doc.width * (canvas.grid.sizeX ?? canvas.grid.size),
+      h: doc.height * (canvas.grid.sizeY ?? canvas.grid.size)
+    };
+  }
+  return docSize(doc);
+}
 
 function destroyHud() {
   if (hud) {
@@ -49,7 +62,7 @@ function destroyGuide() {
 function rotationKnobPlacement(objects, scale) {
   if (objects.length === 1) {
     const doc = objects[0].document;
-    const { w, h } = docSize(doc);
+    const { w, h } = pixelSize(objects[0]);
     const c = { x: doc.x + w / 2, y: doc.y + h / 2 };
     const rad = Math.toRadians(doc.rotation ?? 0);
     return {
@@ -75,7 +88,7 @@ function rotationKnobPlacement(objects, scale) {
 function rotationPivot(objects) {
   if (objects.length === 1) {
     const doc = objects[0].document;
-    const { w, h } = docSize(doc);
+    const { w, h } = pixelSize(objects[0]);
     return { x: doc.x + w / 2, y: doc.y + h / 2 };
   }
   const b = unionBounds(objects);
@@ -85,16 +98,22 @@ function rotationPivot(objects) {
 function captureOriginals(objects) {
   return objects.map((obj) => {
     const doc = obj.document;
-    const { w, h } = docSize(doc);
-    return {
+    const { w, h } = pixelSize(obj);
+    const orig = {
       obj,
       x: doc.x,
       y: doc.y,
       rotation: doc.rotation ?? 0,
       w,
       h,
-      points: isDrawing(obj) && doc.shape.points ? [...doc.shape.points] : null
+      points: isDrawing(obj) && doc.shape.points?.length ? [...doc.shape.points] : null
     };
+    if (isDrawing(obj)) {
+      orig.strokeWidth = doc.strokeWidth ?? 0;
+      orig.fontSize = doc.text ? doc.fontSize : null;
+      orig.radius = doc.shape.type === "c" ? doc.shape.radius : null;
+    }
+    return orig;
   });
 }
 
@@ -117,6 +136,11 @@ function scaledState(orig, pivot, factor) {
   const h = orig.h * factor;
   const state = { x: cx - w / 2, y: cy - h / 2, w, h };
   if (orig.points) state.points = orig.points.map((p) => p * factor);
+  // Drawings scale like an image (Roll20 behavior): stroke, text and radius
+  // scale along, which also keeps Foundry's "visible drawing" validation happy.
+  if (orig.strokeWidth) state.strokeWidth = Math.max(1, Math.round(orig.strokeWidth * factor));
+  if (orig.fontSize) state.fontSize = Math.clamp(Math.round(orig.fontSize * factor), 8, 256);
+  if (orig.radius) state.radius = orig.radius * factor;
   return state;
 }
 
@@ -124,20 +148,30 @@ function scaledState(orig, pivot, factor) {
 /*  Local (client-side) preview                 */
 /* -------------------------------------------- */
 
+/** Build the document changes for a pixel-space size state, per document type. */
+function sizeChanges(obj, state) {
+  if (isDrawing(obj)) {
+    const changes = { "shape.width": state.w, "shape.height": state.h };
+    if (state.points) changes["shape.points"] = state.points;
+    if (state.radius !== undefined) changes["shape.radius"] = state.radius;
+    if (state.strokeWidth !== undefined) changes.strokeWidth = state.strokeWidth;
+    if (state.fontSize !== undefined) changes.fontSize = state.fontSize;
+    return changes;
+  }
+  if (isToken(obj)) {
+    return {
+      width: state.w / (canvas.grid.sizeX ?? canvas.grid.size),
+      height: state.h / (canvas.grid.sizeY ?? canvas.grid.size)
+    };
+  }
+  return { width: state.w, height: state.h };
+}
+
 function applyPreview(orig, state) {
   const doc = orig.obj.document;
   const changes = { x: state.x, y: state.y };
   if (state.rotation !== undefined) changes.rotation = state.rotation;
-  if (state.w !== undefined) {
-    if (isDrawing(orig.obj)) {
-      changes["shape.width"] = state.w;
-      changes["shape.height"] = state.h;
-      if (state.points) changes["shape.points"] = state.points;
-    } else {
-      changes.width = state.w;
-      changes.height = state.h;
-    }
-  }
+  if (state.w !== undefined) Object.assign(changes, sizeChanges(orig.obj, state));
   doc.updateSource(changes);
   orig.obj.renderFlags.set({ refresh: true });
   orig.obj.applyRenderFlags();
@@ -152,7 +186,10 @@ function revertPreview() {
       rotation: orig.rotation,
       w: orig.w,
       h: orig.h,
-      points: orig.points ?? undefined
+      points: orig.points ?? undefined,
+      strokeWidth: orig.strokeWidth || undefined,
+      fontSize: orig.fontSize ?? undefined,
+      radius: orig.radius ?? undefined
     });
   }
 }
@@ -265,6 +302,34 @@ function normalizeDelta(degrees) {
   return ((degrees % 360) + 540) % 360 - 180;
 }
 
+/**
+ * The smallest scale factor that keeps every object valid. Drawings must obey
+ * Foundry's "visible drawing" rule (rect/ellipse dimensions strictly greater
+ * than the stroke width, circles radius > strokeWidth/2); since the stroke
+ * scales along, only rounding margins and absolute minimum sizes remain.
+ */
+function computeMinFactor(originals) {
+  let minF = 0.02;
+  for (const o of originals) {
+    if (isDrawing(o.obj)) {
+      const type = o.obj.document.shape.type;
+      const minDim = Math.max(Math.min(o.w, o.h), 1);
+      if (type === "r" || type === "e") {
+        // Keep dimensions >= 2px and > scaled-then-rounded stroke width
+        minF = Math.max(minF, 2 / minDim, o.strokeWidth ? 1.5 / Math.max(minDim - o.strokeWidth, 1) : 0);
+      } else if (type === "c") {
+        const r = Math.max(o.radius ?? minDim / 2, 1);
+        minF = Math.max(minF, 1.5 / r, o.strokeWidth ? 1 / Math.max(r - o.strokeWidth / 2, 1) : 0);
+      } else {
+        minF = Math.max(minF, 2 / Math.max(o.w, o.h, 1));
+      }
+    } else {
+      minF = Math.max(minF, MIN_SIZE / Math.max(o.w, o.h, MIN_SIZE));
+    }
+  }
+  return minF;
+}
+
 function onDragStart(event, mode) {
   event.stopPropagation();
   const layer = activeTargetLayer();
@@ -284,10 +349,9 @@ function onDragStart(event, mode) {
     const b = unionBounds(objects);
     const pivot = { x: b.minX, y: b.minY }; // scale away from the top-left corner
     const startDist = Math.hypot(p.x - pivot.x, p.y - pivot.y) || 1;
-    const minDim = Math.min(...originals.map((o) => Math.min(o.w, o.h)));
     drag = {
       mode, layer, objects, originals, pivot, startDist,
-      minFactor: Math.min(1, MIN_SIZE / minDim),
+      minFactor: computeMinFactor(originals),
       factor: 1
     };
   }
@@ -351,18 +415,13 @@ async function onDragEnd() {
   } else if (current.factor !== 1) {
     const updates = current.originals.map((orig) => {
       const s = scaledState(orig, current.pivot, current.factor);
-      const update = { _id: orig.obj.id, x: s.x, y: s.y };
-      if (isDrawing(orig.obj)) {
-        update["shape.width"] = s.w;
-        update["shape.height"] = s.h;
-        if (s.points) update["shape.points"] = s.points;
-      } else {
-        update.width = s.w;
-        update.height = s.h;
-      }
-      return update;
+      return { _id: orig.obj.id, x: s.x, y: s.y, ...sizeChanges(orig.obj, s) };
     });
-    await canvas.scene.updateEmbeddedDocuments(current.layer.constructor.documentName, updates);
+    // The drag already previewed the final size — skip the token resize animation.
+    await canvas.scene.updateEmbeddedDocuments(current.layer.constructor.documentName, updates, {
+      animate: false,
+      animation: { duration: 0 }
+    });
   }
   updateHandle();
 }
@@ -371,8 +430,10 @@ export function init() {
   const refresh = foundry.utils.debounce(updateHandle, 16);
   Hooks.on("controlTile", refresh);
   Hooks.on("controlDrawing", refresh);
+  Hooks.on("controlToken", refresh);
   Hooks.on("refreshTile", refresh);
   Hooks.on("refreshDrawing", refresh);
+  Hooks.on("refreshToken", refresh);
   Hooks.on("canvasPan", refresh);
   Hooks.on("canvasTearDown", () => {
     drag = null;

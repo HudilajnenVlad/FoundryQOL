@@ -2,7 +2,7 @@
   "id": "qol-canvas-tools",
   "title": "QOL Canvas Tools",
   "description": "Quality-of-life canvas tools: a locked background underlayer for tiles, group rotation of tiles/drawings around a common center, and Roll20-style hover tooltips for tokens.",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13"

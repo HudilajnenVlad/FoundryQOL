@@ -11,7 +11,7 @@
       },
       "RotationHandle": {
         "Name": "Uchwyty obrotu i skalowania",
-        "Hint": "Pokazuje uchwyt obrotu (podąża za obrotem obiektu) i narożny uchwyt skalowania przy zaznaczonych kafelkach i rysunkach, jak w Roll20. Przytrzymaj Shift podczas obracania, aby przyciągać co 15°."
+        "Hint": "Pokazuje uchwyt obrotu (podąża za obrotem obiektu) i narożny uchwyt skalowania przy zaznaczonych kafelkach, rysunkach i tokenach, jak w Roll20. Przytrzymaj Shift podczas obracania, aby przyciągać co 15°."
       },
       "DrawingStyleBar": {
         "Name": "Pasek stylu rysunków",

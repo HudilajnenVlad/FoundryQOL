@@ -13,10 +13,10 @@ When two or more **tiles** or **drawings** are selected, rotating them (mouse wh
 
 ## Rotation & scale handles
 
-Selected tiles and drawings get Roll20-style handles:
+Selected tiles, drawings and tokens get Roll20-style handles:
 
 - A **round rotation knob** above the object that follows the object's rotation. Drag it to rotate with a live preview — free rotation in 1° steps, or hold **Shift** to snap to 15°. With several objects selected the whole group turns around its common center (when group rotation is enabled).
-- A **square scale knob** at the bottom-right corner. Drag it to stretch or compress the whole selection uniformly (polygons and freehand drawings scale correctly too).
+- A **square scale knob** at the bottom-right corner. Drag it to stretch or compress the whole selection uniformly, down to a small fraction of the original size (polygons and freehand drawings scale correctly; tokens resize in grid units).
 
 Core Foundry shortcuts still work: hover a selected object and scroll with **Ctrl** (15°) or **Shift** (45°).
 
