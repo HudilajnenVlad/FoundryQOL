@@ -9,6 +9,8 @@ const MIN_SIZE = 8; // smallest allowed object dimension when scaling down
 let hud = null;   // PIXI.Container {rotKnob, scaleKnob}
 let guide = null; // PIXI.Container {gfx, label} shown while dragging
 let drag = null;  // {mode, layer, objects, pivot, originals, ...}
+let groupAngle = 0;     // where the knob rests for multi-selections (deg)
+let selectionKey = "";  // to reset groupAngle when the selection changes
 
 const enabled = () => isEnabled(SETTINGS.rotationHandle);
 
@@ -56,12 +58,16 @@ function rotationKnobPlacement(objects, scale) {
       angle: doc.rotation ?? 0
     };
   }
+  // Groups: the knob rests at the angle where the last rotation drag ended,
+  // orbiting the selection center (so it stays where the user let go).
   const b = unionBounds(objects);
-  const cx = (b.minX + b.maxX) / 2;
+  const c = { x: (b.minX + b.maxX) / 2, y: (b.minY + b.maxY) / 2 };
+  const radius = (b.maxY - b.minY) / 2 + OFFSET / scale;
+  const rad = Math.toRadians(groupAngle);
   return {
-    pos: { x: cx, y: b.minY - OFFSET / scale },
-    stem: { x: cx, y: b.minY },
-    angle: 0
+    pos: rotatePoint({ x: c.x, y: c.y - radius }, c, rad),
+    stem: rotatePoint({ x: c.x, y: b.minY }, c, rad),
+    angle: groupAngle
   };
 }
 
@@ -160,7 +166,15 @@ export function updateHandle() {
   if (drag) return; // repositioned manually during a drag
   const layer = enabled() ? activeTargetLayer() : null;
   const objects = layer?.controlled ?? [];
-  if (!layer || objects.length === 0) return destroyHud();
+  if (!layer || objects.length === 0) {
+    selectionKey = "";
+    return destroyHud();
+  }
+  const key = objects.map((o) => o.id).sort().join(",");
+  if (key !== selectionKey) {
+    selectionKey = key;
+    groupAngle = 0;
+  }
 
   if (!hud || hud.parent !== layer) {
     destroyHud();
@@ -293,11 +307,10 @@ function onDragMove(event) {
     delta = event.shiftKey ? delta.toNearest(15) : Math.round(delta);
     drag.delta = delta;
     for (const orig of drag.originals) applyPreview(orig, rotatedState(orig, drag.pivot, delta));
-    // Keep the knob under the cursor's orbit
+    // The knob rides exactly on the cursor, stem pointing back at the pivot
     if (hud) {
-      const place = rotationKnobPlacement(drag.objects, scale);
-      hud.rotKnob.position.set(place.pos.x, place.pos.y);
-      hud.rotKnob.rotation = Math.toRadians(place.angle + (drag.objects.length > 1 ? drag.delta : 0));
+      hud.rotKnob.position.set(p.x, p.y);
+      hud.rotKnob.rotation = Math.atan2(drag.pivot.y - p.y, drag.pivot.x - p.x) - Math.PI / 2;
       const b = unionBounds(drag.objects);
       hud.scaleKnob.position.set(b.maxX + 6 / scale, b.maxY + 6 / scale);
     }
@@ -308,10 +321,10 @@ function onDragMove(event) {
     drag.factor = factor;
     for (const orig of drag.originals) applyPreview(orig, scaledState(orig, drag.pivot, factor));
     if (hud) {
-      const b = unionBounds(drag.objects);
-      hud.scaleKnob.position.set(b.maxX + 6 / scale, b.maxY + 6 / scale);
+      hud.scaleKnob.position.set(p.x, p.y);
       const place = rotationKnobPlacement(drag.objects, scale);
       hud.rotKnob.position.set(place.pos.x, place.pos.y);
+      hud.rotKnob.rotation = Math.toRadians(place.angle);
     }
     drawGuide(p, `×${factor.toFixed(2)}`, drag.pivot);
   }
@@ -328,6 +341,10 @@ async function onDragEnd() {
   drag = null;
 
   if (current.mode === "rotate") {
+    // For groups, remember the release angle so the knob stays where dropped.
+    if (current.objects.length > 1) {
+      groupAngle = ((groupAngle + current.delta) % 360 + 360) % 360;
+    }
     // Route through rotateMany so group rotation (when enabled) applies the
     // shared-center behavior and a single selected object rotates in place.
     if (current.delta) await current.layer.rotateMany({ delta: current.delta });
